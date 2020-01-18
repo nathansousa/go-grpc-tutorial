@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package grpc;
+
+service BookService {
+    rpc AddBook (Book) returns (AddBookResponse);
+    rpc GetBookAndQuantity (GetBookRequest) returns (GetBookResponse);
+}
+
+message AddBookResponse {
+    Book book = 1;
+    Error error = 2;
+}
+
+message GetBookRequest {
+    string name = 1;
+}
+
+message GetBookResponse {
+    Book book = 1;
+    int64 quantity = 2;
+    Error error = 3;
+}
+
+message Error {
+    string code = 1;
+    string message = 2;
+}
+
+message Book {
+    string bookID = 1;
+    string name = 2;
+    string author = 3;
+    bool isDigital = 5;
+}
