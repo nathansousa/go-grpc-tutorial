@@ -2,23 +2,23 @@ package configs
 
 import (
 	"fmt"
-	"github.com/nathansousa/go-grpc-example/internal/controllers"
-	GRPC "github.com/nathansousa/go-grpc-example/internal/gRPC"
+	BookGRPC "github.com/nathansousa/go-grpc-example/internal/gRPC"
+	"github.com/nathansousa/go-grpc-example/internal/gRPC/controllers"
 	"google.golang.org/grpc"
 	"log"
 	"net"
 )
 
 func SetUpGRPCServer() {
-	getNetListener(8000)
-	server := grpc.NewServer()
+	serverGRPC := grpc.NewServer()
+	BookGRPC.RegisterBookServiceServer(serverGRPC, controllers.NewBookController())
 
-	controller := controllers.NewBookController()
-	GRPC.RegisterBookServiceServer(server, controller)
-
-	if err := grpcServer.Serve(netListener); err != nil {
+	err := serverGRPC.Serve(getNetListener(8000))
+	if err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
+
+	log.Println("gRPC server is running on port: 8000")
 }
 
 func getNetListener(port uint) net.Listener {

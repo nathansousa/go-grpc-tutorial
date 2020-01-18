@@ -12,6 +12,5 @@ func SetUpGRPCClient() *grpc.ClientConn {
 		log.Fatalln(err)
 	}
 
-	defer conn.Close()
 	return conn
 }

@@ -3,17 +3,24 @@ package main
 import (
 	"context"
 	"github.com/nathansousa/go-grpc-example/configs"
-	grpc "github.com/nathansousa/go-grpc-example/internal/gRPC"
+	bookGRPC "github.com/nathansousa/go-grpc-example/internal/gRPC"
 	"log"
 )
 
 func main() {
-	client := grpc.NewBookServiceClient(configs.SetUpGRPCClient())
+	client := bookGRPC.NewBookServiceClient(configs.SetUpGRPCClient())
 
-	book := &grpc.Book{
-		BookID:    "testClient",
-		Name:      "testClient",
-		Author:    "testClient",
+	for i := 0; i < 10; i++ {
+		AddBook(string(i), client)
+		GetBook(string(i), client)
+	}
+}
+
+func AddBook(data string, client bookGRPC.BookServiceClient) {
+	book := &bookGRPC.Book{
+		BookID:    data,
+		Name:      data,
+		Author:    data,
 		IsDigital: true,
 	}
 
@@ -23,4 +30,17 @@ func main() {
 	}
 
 	log.Println("book inserted with success:", response)
+}
+
+func GetBook(name string, client bookGRPC.BookServiceClient) {
+	request := &bookGRPC.GetBookRequest{
+		Name: name,
+	}
+
+	response, err := client.GetBookAndQuantity(context.Background(), request)
+	if err != nil {
+		log.Println("something wrong happened", err)
+	}
+
+	log.Println("success get book data:", response)
 }
