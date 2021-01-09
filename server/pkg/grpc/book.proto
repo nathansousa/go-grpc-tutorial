@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "server/internal/grpc";
+
+service BookStore {
+  rpc AddBook (AddBookRequest) returns (AddBookResponse);
+}
+
+message AddBookRequest {
+  string name = 1;
+  string author = 2;
+}
+
+message AddBookResponse {
+  string bookID = 1;
+}
